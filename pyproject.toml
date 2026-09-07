@@ -1,0 +1,41 @@
+[project]
+name = "fetch"
+version = "2026.0"
+description = "Download YouTube Music albums and tag them with MusicBrainz metadata"
+readme = "README.md"
+authors = [
+    { name = "William Jackson", email = "william@subtlecoolness.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "flask>=3.1,<4",
+    "mutagen>=1.47,<2",
+    "notch>=2026.0",
+    "requests>=2.32,<3",
+    "waitress>=3.0.2",
+    "yt-dlp>=2026.8.12",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.4,<9"]
+
+[project.scripts]
+fetch = "fetch:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["uv_build>=0.12.9,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.6",
+]
+
+[tool.ruff.lint]
+extend-select = ["ANN", "E", "F", "FURB", "I", "PERF", "Q", "RSE", "RUF", "S", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]

@@ -1,0 +1,12 @@
+<div class="message working"
+     hx-get="{{ url_for('job_status', job_id=job.id) }}"
+     hx-trigger="every 2s"
+     hx-swap="outerHTML">
+  {% if job.total and job.current %}
+    <p><strong>{{ job.stage }} file {{ job.current }} of {{ job.total }}</strong>{% if job.filename %}: {{ job.filename }}{% endif %}</p>
+    <progress value="{{ job.current }}" max="{{ job.total }}">{{ job.current }} of {{ job.total }}</progress>
+  {% else %}
+    <p><strong>{{ job.stage }}…</strong></p>
+    <progress>Working…</progress>
+  {% endif %}
+</div>

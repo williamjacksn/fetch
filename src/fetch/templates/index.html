@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fetch an album</title>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.10/dist/htmx.min.js" integrity="sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V" crossorigin="anonymous"></script>
+    <style>
+      :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+      body { max-width: 44rem; margin: 4rem auto; padding: 0 1rem; line-height: 1.5; }
+      form { display: grid; gap: 1rem; }
+      label { display: grid; gap: .35rem; font-weight: 600; }
+      input, button { box-sizing: border-box; width: 100%; padding: .7rem; font: inherit; }
+      button { cursor: pointer; font-weight: 700; }
+      .message { padding: .8rem 1rem; border-radius: .3rem; }
+      .error { background: #7f1d1d; color: white; }
+      .success { background: #166534; color: white; }
+      .working { border: 1px solid currentColor; }
+      .path { overflow-wrap: anywhere; }
+      .htmx-indicator { display: none; align-items: center; gap: .65rem; margin: 1rem 0; }
+      .htmx-request.htmx-indicator, .htmx-request .htmx-indicator { display: flex; }
+      .spinner { width: 1.1rem; height: 1.1rem; border: .2rem solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .75s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+      progress { width: 100%; }
+      small { opacity: .75; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Fetch an album</h1>
+      <p>Download a YouTube Music album as MP3 files and apply metadata from a MusicBrainz release.</p>
+      <div id="result" aria-live="polite">
+        {% if job %}{% include "_job.html" %}{% else %}{% include "_result.html" %}{% endif %}
+      </div>
+      <form method="post" hx-post="/" hx-target="#result" hx-swap="innerHTML" hx-indicator="#progress">
+        <label>
+          YouTube Music album URL
+          <input name="youtube_url" type="url" required placeholder="https://music.youtube.com/playlist?list=…" value="{{ youtube_url|default('') }}">
+        </label>
+        <label>
+          MusicBrainz release URL
+          <input name="musicbrainz_url" type="url" required placeholder="https://musicbrainz.org/release/…" value="{{ musicbrainz_url|default('') }}">
+        </label>
+        <button type="submit">Download and tag</button>
+      </form>
+      <div id="progress" class="htmx-indicator" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Downloading and tagging… This can take several minutes.</span>
+      </div>
+      <p><small>Output directory: <span class="path">{{ output_dir }}</span>. The request remains open while the album downloads.</small></p>
+    </main>
+  </body>
+</html>
