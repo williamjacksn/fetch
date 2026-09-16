@@ -16,14 +16,8 @@ dependencies = [
     "yt-dlp>=2026.8.12",
 ]
 
-[project.optional-dependencies]
-test = ["pytest>=8.4,<9"]
-
 [project.scripts]
 fetch = "fetch:main"
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
 
 [build-system]
 requires = ["uv_build>=0.12.9,<0.13.0"]
@@ -31,7 +25,9 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "pytest>=9.1.1",
     "ruff>=0.16.6",
+    "ty>=0.0.81",
 ]
 
 [tool.ruff.lint]
